@@ -1,27 +1,17 @@
-name: Commit date to master
+name: Push commit
 on: push
+permissions:
+  contents: write
 jobs:
-  date:
+  report:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the branch
-      - name: checkout
-        uses: actions/checkout@v2
-
-      - name: save current date
+      - uses: actions/checkout@v3
+      - name: Create report file
+        run: date +%s > report.txt
+      - name: Commit report
         run: |
-          # do some operation that changes a file in the git repo
-          date > time.txt
-
-      - name: setup git config
-        run: |
-          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
-          git config user.name "GitHub Actions Bot"
-          git config user.email "<>"
-
-      - name: commit
-        run: |
-          # Stage the file, commit and push
-          git add time.txt
-          git commit -m "new date commit"
-          git push origin master
+          git config --global user.name 'Your Name'
+          git config --global user.email 'your-username@users.noreply.github.com'
+          git commit -am "Automated report"
+          git push
